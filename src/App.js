@@ -15,7 +15,7 @@ import Footer from './components/Footer';
 function App() {
   
   return (
-    <div className="App">
+    <div className="App" styles={{background:'beige'}}>
       <Router>
       <Header/>
       <Routes>
