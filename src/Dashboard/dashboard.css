@@ -6,10 +6,11 @@
 
         align-self: center;
         padding-left: 20px;
-        margin: 20px;
-        font-size: 30px;
 
-        width: 90%;
+        font-size: large;
+    white-space: nowrap;
+
+        width: 100%;
 
         color: black;
         text-decoration: none;
@@ -17,7 +18,8 @@
 
 
 
-        align-items: center;
+    align-items: center;
+    justify-content: center;
 
 
     }
@@ -31,4 +33,3 @@
     background-color: white;
 
 }
-
