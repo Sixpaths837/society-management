@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Sixpaths837/society-management/static/css/main.e9e59ea8.css",
-    "main.js": "/Sixpaths837/society-management/static/js/main.6bfecd06.js",
-    "static/js/787.a3a28e60.chunk.js": "/Sixpaths837/society-management/static/js/787.a3a28e60.chunk.js",
-    "index.html": "/Sixpaths837/society-management/index.html",
-    "main.e9e59ea8.css.map": "/Sixpaths837/society-management/static/css/main.e9e59ea8.css.map",
-    "main.6bfecd06.js.map": "/Sixpaths837/society-management/static/js/main.6bfecd06.js.map",
-    "787.a3a28e60.chunk.js.map": "/Sixpaths837/society-management/static/js/787.a3a28e60.chunk.js.map"
+    "main.css": "/society-management/static/css/main.e9e59ea8.css",
+    "main.js": "/society-management/static/js/main.d4c90cc9.js",
+    "static/js/787.a3a28e60.chunk.js": "/society-management/static/js/787.a3a28e60.chunk.js",
+    "index.html": "/society-management/index.html",
+    "main.e9e59ea8.css.map": "/society-management/static/css/main.e9e59ea8.css.map",
+    "main.d4c90cc9.js.map": "/society-management/static/js/main.d4c90cc9.js.map",
+    "787.a3a28e60.chunk.js.map": "/society-management/static/js/787.a3a28e60.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e9e59ea8.css",
-    "static/js/main.6bfecd06.js"
+    "static/js/main.d4c90cc9.js"
   ]
 }
