@@ -14,9 +14,18 @@ app.use(cors({
 
 const db = mysql.createConnection({
     user: "root",
-    host: "127.0.0.1",
+    host: "localhost",
     password: "orangutan",
     database: "society",
+    port: "3306"
+});
+
+db.connect((err)=>{
+    if(err){
+        throw err
+    }else{
+        console.log('Connected to MySQL')
+    }
 });
 
 app.post('/register', (req, res) => {
@@ -35,7 +44,7 @@ app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    db.query("SELECT * FROM tenant WHERE username=?;", username, (err, result) => {
+    db.query("SELECT * FROM tenant WHERE User_ID=?;", username, (err, result) => {
         if (err) {
             res.send({ err: err });
         }

@@ -10,17 +10,23 @@ class Login extends Component {
       password: "",
     };
 
-    this.changeUsernameHandler = this.changeUsernameHandler.bind(this);
-    this.changePasswordHandler = this.changePasswordHandler.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  changeUsernameHandler = (event) => {
-    this.setState({ username: event.target.value });
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   };
-  changePasswordHandler = (event) => {
-    this.setState({ password: event.target.value });
+  loginUser = (e) => {
+    Axios.post("http://localhost:3001/login", {
+      username: this.state.username,
+      password: this.state.password,
+    }).then((res) => {
+      console.log(res);
+    });
+    e.preventDefault();
   };
-  loginUser() {}
   render() {
     return (
       <div>
@@ -39,7 +45,7 @@ class Login extends Component {
                       name="username"
                       className="form-control"
                       value={this.state.username}
-                      onChange={this.changeUsernameHandler}
+                      onChange={this.handleChange}
                     />
                   </div>
                   <div className="form-group">
@@ -50,7 +56,7 @@ class Login extends Component {
                       name="password"
                       className="form-control"
                       value={this.state.password}
-                      onChange={this.changePasswordHandler}
+                      onChange={this.handleChange}
                     />
                   </div>
                   <br />

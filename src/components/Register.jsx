@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import { Navigate } from "react-router";
-import { Link } from "react-router-dom";
 
 class Register extends Component {
   constructor(props) {
@@ -35,8 +33,9 @@ class Register extends Component {
       hno: this.state.hno,
     }).then((res) => {
       console.log(res);
-      alert("User Registered");
     });
+    alert("User Registered");
+    this.props.history.push("/Sixpaths837/society-management/");
     console.log(this.state);
     e.preventDefault();
   };
@@ -80,6 +79,8 @@ class Register extends Component {
                       name="password"
                       className="form-control"
                       required
+                      pattern=".{8,}"
+                      title="Eight or more characters"
                       value={this.state.password}
                       onChange={this.handleChange}
                       onKeyUp={this.check}
@@ -93,11 +94,17 @@ class Register extends Component {
                       name="confirmpassword"
                       className="form-control"
                       required
+                      pattern=".{8,}"
+                      title="Eight or more characters"
                       value={this.state.confirmpassword}
                       onChange={this.handleChange}
                       onKeyUp={this.check}
                     />
-                    <p className="text-danger">{this.state.err.conpass}</p>
+                    <span className="text-danger">
+                      {this.state.err.conpass === ""
+                        ? null
+                        : this.state.err.conpass}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label>Name</label>
@@ -116,7 +123,10 @@ class Register extends Component {
                       placeholder="House Number"
                       name="hno"
                       className="form-control"
+                      type="number"
                       required
+                      min="100"
+                      max="999"
                       value={this.state.hno}
                       onChange={this.handleChange}
                     />
