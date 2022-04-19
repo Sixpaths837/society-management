@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route exact path="/Sixpaths837/society-management/register/" element={<Register/>}/>
         <Route exact path="/Sixpaths837/society-management/" element={<Login/>}/>
-         
+
         <Route exact path="/Sixpaths837/society-management/dashboard" element={<Dashboard/>}/>
       </Routes>
       </Router>
