@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
 class Register extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class Register extends Component {
   };
 
   registerUser = (e) => {
+    e.preventDefault();
     Axios.post("http://localhost:3001/register", {
       username: this.state.username,
       password: this.state.password,
@@ -35,18 +37,17 @@ class Register extends Component {
       console.log(res);
     });
     alert("User Registered");
-    this.props.history.push("/Sixpaths837/society-management/");
-    console.log(this.state);
-    e.preventDefault();
   };
   check() {
     var password = this.state.password;
     var conpass = this.state.confirmpassword;
 
-    if (password === conpass) {
+    if (password.length < 8 && conpass.length < 8) {
+      this.setState({ err: { conpass: "Passwords are too short!" } });
+    } else if (password === conpass) {
       this.setState({ err: { conpass: "" } });
     } else {
-      this.setState({ err: { conpass: "Passwords do not Match!" } });
+      this.setState({ err: { conpass: "Passwords don't Match!" } });
     }
   }
   render() {
@@ -94,8 +95,6 @@ class Register extends Component {
                       name="confirmpassword"
                       className="form-control"
                       required
-                      pattern=".{8,}"
-                      title="Eight or more characters"
                       value={this.state.confirmpassword}
                       onChange={this.handleChange}
                       onKeyUp={this.check}
@@ -123,14 +122,15 @@ class Register extends Component {
                       placeholder="House Number"
                       name="hno"
                       className="form-control"
-                      type="number"
+                      type="text"
                       required
-                      min="100"
-                      max="999"
                       value={this.state.hno}
                       onChange={this.handleChange}
+                      onKeyUp={this.check}
                     />
-                    <p className="text-danger">{this.state.err.hno}</p>
+                    <span className="text-danger">
+                      {this.state.err.hno === "" ? null : this.state.err.hno}
+                    </span>
                   </div>
                   <br />
                   <button
@@ -138,7 +138,13 @@ class Register extends Component {
                     onClick={this.registerUser}
                     style={{ borderRadius: "7px", width: "62%" }}
                   >
-                    <h6>Register</h6>
+                    <Link
+                      className="btn btn-danger"
+                      to="/society-management/"
+                      style={{ marginLeft: "6%", width: "46%" }}
+                    >
+                      <h6>Register</h6>
+                    </Link>
                   </button>
                 </form>
               </div>

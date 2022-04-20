@@ -7,7 +7,7 @@ class Header extends Component {
       <div>
         <header>
           <nav className="navbar navbar-dark bg-dark">
-            <Link to="/Sixpaths837/society-management/" className="text-light">
+            <Link to="/society-management/" className="text-light">
               <div>
                 <h3>Society-Management</h3>
               </div>

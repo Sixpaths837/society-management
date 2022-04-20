@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import Issues from "./issues";
 
-class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-  }
-  state = {};
-  render() {
-    return <div></div>;
-  }
+function Dashboard() {
+  return (
+    <div>
+      <Issues />
+    </div>
+  );
 }
 
 export default Dashboard;

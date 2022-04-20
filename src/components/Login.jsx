@@ -8,6 +8,7 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      err: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -19,13 +20,18 @@ class Login extends Component {
     });
   };
   loginUser = (e) => {
+    e.preventDefault();
     Axios.post("http://localhost:3001/login", {
       username: this.state.username,
       password: this.state.password,
     }).then((res) => {
       console.log(res);
+      if (res.data.message) {
+        this.setState({ err: res.data.message });
+      } else {
+        this.setState({ err: res.data[0].User_ID });
+      }
     });
-    e.preventDefault();
   };
   render() {
     return (
@@ -73,7 +79,7 @@ class Login extends Component {
                   </button>
                   <Link
                     className="btn btn-danger"
-                    to="/Sixpaths837/society-management/register/"
+                    to="/society-management/register/"
                     style={{ marginLeft: "6%", width: "46%" }}
                   >
                     <h6>Register</h6>
@@ -81,6 +87,13 @@ class Login extends Component {
                 </form>
                 <br />
                 <hr width="100%" style={{ borderTop: "1px solid grey" }}></hr>
+                <b>
+                  <h5>
+                    <span className="text-danger">
+                      {this.state.err === "" ? null : this.state.err}
+                    </span>
+                  </h5>
+                </b>
               </div>
               <br />
               <br />
