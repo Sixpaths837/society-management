@@ -17,7 +17,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
     key: "userId",
@@ -25,7 +25,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 60*60*24,
+        expires: 60 * 60 * 24,
     }
 }));
 
@@ -37,14 +37,15 @@ const db = mysql.createConnection({
     port: "3306"
 });
 
-db.connect((err)=>{
-    if(err){
+db.connect((err) => {
+    if (err) {
         throw err
-    }else{
+    } else {
         console.log('Connected to MySQL')
     }
 });
 
+//Admin adding users
 app.post('/register', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -52,11 +53,105 @@ app.post('/register', (req, res) => {
     const hno = req.body.hno
     bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query("INSERT INTO tenant (User_ID, Password, Name, House_Number) values (?, ?, ?, ?)", [username, hash, nam, hno], (err, result) => {
-            res.send({message: err.sqlMessage})
+            res.send({ message: err.sqlMessage })
         })
     })
 });
 
+//Adding Issues
+app.post('/addissue', (req, res) => {
+    //const issueid = req.body.issueid;
+    const desc = req.body.desc;
+    const rep = req.body.rep;
+    const subject = req.body.subject;
+    const userid = app.session.user[0].userid;
+
+    db.query("INSERT INTO issues (Issue_ID, Subject, Reply, Description, User_ID) values ( , ?, , NULL, ?, ?)", [, desc, rep, subject, userid], (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+    })
+});
+
+
+
+//Displaying Payments for a user
+app.post('/showpayment', (req, res) => {
+    const userid = app.session.user[0].userid;
+    db.query("SELECT Amount, Duration, User_ID FROM payments WHERE User_ID=?", [userid], (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+        if (result.length > 0) {
+            res.send(result);
+        }
+        else {
+            res.send({ message: "No outstanding payments." });
+        }
+    })
+});
+
+//Admin resolving complaint
+app.post('/addreply', (req, res) => {
+    const userid = app.session.user[0].userid;
+    const reply = req.reply;
+
+    db.query("update issues set Reply = ? where User_ID = ?", [reply, userid], (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+        else {
+            res.send({ message: "Complaint Resolved." });
+        }
+    })
+});
+
+//User seeing if complaint is resolved
+app.post('/viewreply', (req, res) => {
+    const userid = app.session.user[0].userid;
+    db.query("select Reply from issues where User_ID = ?", [userid], (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+        if (result.length > 0) {
+            res.send(result);
+        }
+        else {
+            res.send({ message: "Complaint not resolved yet." });
+        }
+    })
+});
+
+//Admin adding payments
+app.post('/viewreply', (req, res) => {
+    const userid = app.session.user[0].userid;
+    db.query("select Reply from issues where User_ID = ?", [userid], (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+        if (result.length > 0) {
+            res.send(result);
+        }
+        else {
+            res.send({ message: "Complaint not resolved yet." });
+        }
+    })
+});
+
+//Admin deleting user
+app.post('/deleteuser', (req, res) => {
+    const userid = app.session.user[0].userid;
+    db.query("delete FROM tenant WHERE User_ID=?", [userid], (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+        else {
+            res.send({ message: "Successfully deleted user." });
+        }
+    })
+});
+
+//User logging in
 app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -66,8 +161,8 @@ app.post('/login', (req, res) => {
             res.send({ err: err });
         }
         if (result.length > 0) {
-            bcrypt.compare(password, result[0].Password, (err, response)=>{
-                if(response) {
+            bcrypt.compare(password, result[0].Password, (err, response) => {
+                if (response) {
                     req.session.user = result;
                     console.log(req.session.user);
                     res.send(result);
@@ -84,12 +179,12 @@ app.post('/login', (req, res) => {
     })
 });
 
-app.get('/login', (req,res)=>{
-    if(req.session.user){
+app.get('/login', (req, res) => {
+    if (req.session.user) {
         res.send({
             loggedIn: true, user: req.session.user
         })
-    }else{
+    } else {
         res.send({
             loggedIn: false
         })
