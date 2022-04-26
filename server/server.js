@@ -123,7 +123,7 @@ app.post('/viewreply', (req, res) => {
 });
 
 //Admin adding payments
-app.post('/viewreply', (req, res) => {
+app.post('/addpayments', (req, res) => {
     const userid = app.session.user[0].userid;
     db.query("select Reply from issues where User_ID = ?", [userid], (err, result) => {
         if (err) {
