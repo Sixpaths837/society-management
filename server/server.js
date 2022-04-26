@@ -109,7 +109,7 @@ app.post('/addreply', (req, res) => {
 //User seeing if complaint is resolved
 app.post('/viewreply', (req, res) => {
     const userid = app.session.user[0].userid;
-    db.query("select Reply from issues where User_ID = ?", [userid], (err, result) => {
+    db.query("select Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL", [userid], (err, result) => {
         if (err) {
             res.send({ err: err });
         }
@@ -125,7 +125,7 @@ app.post('/viewreply', (req, res) => {
 //Admin adding payments
 app.post('/addpayments', (req, res) => {
     const userid = app.session.user[0].userid;
-    db.query("select Reply from issues where User_ID = ?", [userid], (err, result) => {
+    db.query("insert into payments values  User_ID = ?", [userid], (err, result) => {
         if (err) {
             res.send({ err: err });
         }
