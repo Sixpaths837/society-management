@@ -70,6 +70,7 @@ class Register extends Component {
                       required
                       value={this.state.username}
                       onChange={this.handleChange}
+                      autoComplete="off"
                     />
                   </div>
                   <div className="form-group">
@@ -114,6 +115,7 @@ class Register extends Component {
                       required
                       value={this.state.name}
                       onChange={this.handleChange}
+                      autoComplete="off"
                     />
                   </div>
                   <div className="form-group">
@@ -127,6 +129,7 @@ class Register extends Component {
                       value={this.state.hno}
                       onChange={this.handleChange}
                       onKeyUp={this.check}
+                      autoComplete="off"
                     />
                     <span className="text-danger">
                       {this.state.err.hno === "" ? null : this.state.err.hno}

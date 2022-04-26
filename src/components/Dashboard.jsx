@@ -1,10 +1,10 @@
 import React from "react";
-import Issues from "./issues";
+import Issues from "./Issues";
 
-function Dashboard() {
+function Dashboard(props) {
   return (
     <div>
-      <Issues />
+      <Issues user={props.user} />
     </div>
   );
 }

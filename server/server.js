@@ -53,7 +53,7 @@ app.post('/register', (req, res) => {
     const hno = req.body.hno
     bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query("INSERT INTO tenant (User_ID, Password, Name, House_Number) values (?, ?, ?, ?)", [username, hash, nam, hno], (err, result) => {
-            res.send({ message: err.sqlMessage })
+            res.send(err)
         })
     })
 });
@@ -174,7 +174,7 @@ app.post('/login', (req, res) => {
             );
         }
         else {
-            res.send({ message: "User doesnt exist." });
+            res.send({ message: "User doesn't exist." });
         }
     })
 });
@@ -191,6 +191,10 @@ app.get('/login', (req, res) => {
     }
 })
 
+app.get('/logout', (req,res)=>{
+    res.clearCookie('userId');
+    res.redirect('/');
+})
 app.listen(3001, () => {
     console.log('Connected on Port 3001');
 });
