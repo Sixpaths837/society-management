@@ -26,52 +26,49 @@ function Issues(props) {
     }
   }
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="card col-md-6 offset-md-3 offset-md-3">
-            <h3 className="text-center text-danger"> Issues</h3>
-            <div className="card-body">
-              <form onChange={check}>
-                <div>
-                  <div className="form-group">
-                    <label className="form-label">Subject</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="subject"
-                      aria-describedby="subject"
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Description</label>
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      id="description"
-                      value={complaint}
-                      onChange={(e) => setComplaint(e.target.value)}
-                    />
-                    <span className="txt-danger">
-                      {err === {} ? "" : err.subject}
-                    </span>
-                  </div>
-                  <br />
-                  <button
-                    type="submit"
-                    className="btn btn-danger"
-                    onClick={registerComplain}
-                    style={{ borderRadius: "7px", width: "62%" }}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
+    <div className="card col-12 m-2">
+      <h3 className="text-center text-danger">Report an Issue</h3>
+      <div className="card-body">
+        <form onChange={check}>
+          <div>
+            <div className="form-group">
+              <label className="form-label">Subject</label>
+              <input
+                type="text"
+                className="form-control"
+                id="subject"
+                placeholder="Subject"
+                aria-describedby="subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
             </div>
+            <div className="form-group">
+              <label className="form-label">Description</label>
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                id="description"
+                placeholder="Description"
+                aria-describedby="description"
+                value={complaint}
+                onChange={(e) => setComplaint(e.target.value)}
+              />
+              <span className="txt-danger">
+                {err === {} ? "" : err.subject}
+              </span>
+            </div>
+            <br />
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={registerComplain}
+              style={{ borderRadius: "7px", width: "62%" }}
+            >
+              Submit
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

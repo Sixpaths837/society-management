@@ -17,8 +17,8 @@ function Header(props) {
             style={{ textDecoration: "none" }}
             className="text-light"
           >
-            <div style={{ width: "100%" }}>
-              <h3>&nbsp;Society-Management</h3>
+            <div className="m-2" style={{ width: "100%" }} role="navigation">
+              <h3>Society-Management</h3>
             </div>
           </Link>
           {props.logIn !== "" ? (

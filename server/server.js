@@ -164,7 +164,6 @@ app.post('/login', (req, res) => {
             bcrypt.compare(password, result[0].Password, (err, response) => {
                 if (response) {
                     req.session.user = result;
-                    console.log(req.session.user);
                     res.send(result);
                 }
                 else {

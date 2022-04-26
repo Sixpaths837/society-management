@@ -27,16 +27,20 @@ class Register extends Component {
   };
 
   registerUser = (e) => {
-    e.preventDefault();
-    Axios.post("http://localhost:3001/register", {
-      username: this.state.username,
-      password: this.state.password,
-      nam: this.state.name,
-      hno: this.state.hno,
-    }).then((res) => {
-      console.log(res);
-    });
-    alert("User Registered");
+    if (this.state.username !== "") {
+      e.preventDefault();
+      Axios.post("http://localhost:3001/register", {
+        username: this.state.username,
+        password: this.state.password,
+        nam: this.state.name,
+        hno: this.state.hno,
+      }).then((res) => {
+        console.log(res);
+      });
+      alert("User Registered");
+    } else {
+      alert("Please fill the form");
+    }
   };
   check() {
     var password = this.state.password;
@@ -143,7 +147,11 @@ class Register extends Component {
                   >
                     <Link
                       className="btn btn-danger"
-                      to="/society-management/"
+                      to={
+                        this.state.username !== ""
+                          ? "/society-management/"
+                          : "/society-management/register"
+                      }
                       style={{ marginLeft: "6%", width: "46%" }}
                     >
                       <h6>Register</h6>

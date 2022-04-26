@@ -7,7 +7,9 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [logIn, setLogIn] = useState(false);
-  async function loginUser() {
+
+  async function loginUser(e) {
+    e.preventDefault();
     await Axios.post("http://localhost:3001/login", {
       username: username,
       password: password,
@@ -15,10 +17,18 @@ function Login(props) {
       if (res.data.message) {
         setErr(res.data.message);
       } else {
-        alert("Logged In!");
         setLogIn(true);
       }
     });
+    if (logIn === true) {
+      setTimeout(() => {
+        window.location.href = e.target.href;
+      }, 10);
+    } else {
+      setTimeout(() => {
+        window.location.href = "http://localhost:3000/society-management/";
+      }, 500);
+    }
   }
 
   return (
@@ -85,19 +95,6 @@ function Login(props) {
                   <span className="text-danger">
                     {err === "" ? null : err}
                     <br />
-                    {logIn === true ? <br /> : ""}
-                    {logIn === true ? (
-                      <a
-                        href="http://localhost:3000/society-management/dashboard"
-                        className="btn btn-primary"
-                        style={{ marginLeft: "2%", width: "46%" }}
-                      >
-                        Click here for Dashboard
-                      </a>
-                    ) : (
-                      ""
-                    )}
-                    {logIn === true ? <br /> : ""}
                   </span>
                 </h5>
               </b>
