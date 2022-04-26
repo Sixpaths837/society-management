@@ -1,11 +1,11 @@
 import './App.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom';
-import Login from './components/Login';
+import { Navigate } from 'react-router';
+import Login from './components/Login.jsx'
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
@@ -14,23 +14,27 @@ import Axios  from 'axios';
 
 function App() {
 
+  const [loginStatus,setLoginStatus] = useState("")
+
   Axios.defaults.withCredentials = true;
-  
+
   useEffect(()=>{
     Axios.get("http://localhost:3001/login").then((response)=>{
-      console.log(response);
+    if(response.data.loggedIn === true){
+      setLoginStatus(response.data.user[0].User_ID);
+    }
     })
-  }, []);
+  }, [loginStatus]);
+
   return (
-    <div className="App" styles={{background:'beige'}}>
-      <Router>
-      <Header/>
+    <div className="App" >
+      <Header logIn={loginStatus}/>
       <Routes>
         <Route exact path="/society-management/register/" element={<Register/>}/>
-        <Route exact path="/society-management/" element={<Login/>}/>
-        <Route exact path="/society-management/dashboard" element={<Dashboard/>}/>
+        <Route exact path="/society-management/" element={loginStatus===""?<Login logIn={loginStatus}/>:<Navigate to='/society-management/dashboard'/>}/>
+        <Route exact path="/society-management/dashboard" element={loginStatus!==""?<Dashboard user={loginStatus}/>:<Navigate to='/society-management/'/>}/>
+        <Route path="*" element={<Navigate to='/society-management/'/>}/>      
       </Routes>
-      </Router>
       <Footer/>
     </div>
   );
