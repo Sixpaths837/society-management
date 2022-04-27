@@ -54,7 +54,7 @@ app.post('/register', (req, res) => {
     const nam = req.body.nam;
     const hno = req.body.hno
     bcrypt.hash(password, saltRounds, (err, hash) => {
-        db.query("INSERT INTO tenant (User_ID, Password, Name, House_Number) values (?, ?, ?, ?)", [username, hash, nam, hno], (err, result) => {
+        db.query("INSERT INTO tenant (User_ID, Password, Name, House_Number) values (?, ?, ?, ?);", [username, hash, nam, hno], (err, result) => {
             if (err) { res.send(err) }
             else { res.send({ message: 'OK' }) }
         })
@@ -67,7 +67,7 @@ app.post('/addissue', (req, res) => {
     const subject = req.body.subject;
     const userid = req.session.user[0].User_ID;
 
-    db.query("INSERT INTO issues ( Subject, Reply, Description, User_ID) values ( ?, NULL, ?, ?)", [subject, rep, desc, userid], (err, result) => {
+    db.query("INSERT INTO issues ( Subject, Reply, Description, User_ID) values ( ?, NULL, ?, ?);", [subject, rep, desc, userid], (err, result) => {
         if (err) {
             res.send({ err: err });
         } else {
@@ -81,7 +81,7 @@ app.post('/addissue', (req, res) => {
 //Displaying Payments for a user
 app.get('/showpayment', (req, res) => {
     const userid = req.session.user[0].User_ID;
-    db.query("SELECT Amount, Duration, User_ID FROM payments WHERE User_ID=?", [userid], (err, result) => {
+    db.query("SELECT Amount, Duration, User_ID FROM payments WHERE User_ID=?;", [userid], (err, result) => {
         if (err) {
             res.json({ err: err });
         }
@@ -89,7 +89,7 @@ app.get('/showpayment', (req, res) => {
             res.json(result);
         }
         else {
-            res.json({ message: "No outstanding payments." });
+            res.send({ message: "No outstanding payments." });
         }
     })
 });
@@ -104,7 +104,7 @@ app.post('/addreply', (req, res) => {
             res.json({ err: err });
         }
         else {
-            res.json({ message: "Complaint Resolved." });
+            res.send({ message: "Complaint Resolved." });
         }
     })
 });
@@ -112,7 +112,7 @@ app.post('/addreply', (req, res) => {
 //User seeing if complaint is resolved
 app.post('/viewreply', (req, res) => {
     const userid = req.session.user[0].User_ID;
-    db.query("select Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL", [userid], (err, result) => {
+    db.query("select Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL;", [userid], (err, result) => {
         if (err) {
             res.json({ err: err });
         }
@@ -120,7 +120,7 @@ app.post('/viewreply', (req, res) => {
             res.json(result);
         }
         else {
-            res.json({ message: "Complaint not resolved yet." });
+            res.send({ message: "Complaint not resolved yet." });
         }
     })
 });
@@ -129,13 +129,12 @@ app.post('/viewreply', (req, res) => {
 app.post('/makepayment', (req, res) => {
     const tno = req.tno;
     const userid = req.session.user[0].userid;
-    db.query("update payments set Bank_Transaction_Number = ? where User_ID = ? ;", [tno, userid], (err, result) => {
+    db.query("update payments set Bank_Transaction_Number = ? where User_ID = ?;", [tno, userid], (err, result) => {
         if (err) {
             res.json({ err: err });
         }
-        else
-        {
-            res.send({message: "Payment successfully made."});
+        else {
+            res.send({ message: "Payment successfully made." });
         }
     })
 });
@@ -170,12 +169,12 @@ app.post('/gethousedeets', (req, res) => {
 //Admin deleting user
 app.post('/deleteuser', (req, res) => {
     const userid = req.body.username;
-    db.query("delete FROM issues WHERE User_ID=?; delete FROM payments WHERE User_ID = ?; delete FROM tenant WHERE User_ID = ?", [userid, userid, userid], (err, result) => {
+    db.query("delete FROM issues WHERE User_ID=?; delete FROM payments WHERE User_ID = ?; delete FROM tenant WHERE User_ID = ?;", [userid, userid, userid], (err, result) => {
         if (err) {
             res.json({ err: err });
         }
         else {
-            res.json({ message: "Successfully deleted user." });
+            res.send({ message: "Successfully deleted user." });
         }
     })
 });
