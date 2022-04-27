@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const bcrypt = require('bcrypt');
+const e = require('express');
+const { response } = require('express');
 const saltRounds = 10;
 
 const app = express();
@@ -123,15 +125,29 @@ app.post('/viewreply', (req, res) => {
     })
 });
 
+//User making payment
+app.post('/makepayment', (req, res) => {
+    const tno = req.tno;
+    const userid = req.session.user[0].userid;
+    db.query("update payments set Bank_Transaction_Number = ? where User_ID = ? ;", [tno, userid], (err, result) => {
+        if (err) {
+            res.json({ err: err });
+        }
+        else
+        {
+            res.send({message: "Payment successfully made."});
+        }
+    })
+});
+
 //Admin adding payments
 app.post('/addpayments', (req, res) => {
     const amount = req.amount;
     const ttype = req.ttype;
     const tmode = req.tmode;
-    const tno = req.tno;
     const dur = req.dur;
     const userid = req.session.user[0].userid;
-    db.query("insert into payments (Amount, Transaction_Type, Transaction_Mode, Bank_Transaction_Number, Duration, User_ID) values (?,?,?,?,?,?);", [amount, ttype, tmode, tno, dur, userid], (err, result) => {
+    db.query("insert into payments (Amount, Transaction_Type, Transaction_Mode, Duration, User_ID) values (?,?,?,?,?);", [amount, ttype, tmode, dur, userid], (err, result) => {
         if (err) {
             res.json({ err: err });
         }
