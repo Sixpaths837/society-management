@@ -53,8 +53,8 @@ app.post('/register', (req, res) => {
     const hno = req.body.hno
     bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query("INSERT INTO tenant (User_ID, Password, Name, House_Number) values (?, ?, ?, ?)", [username, hash, nam, hno], (err, result) => {
-            if(err){res.send(err)}
-            else{res.send({message: 'OK'})}
+            if (err) { res.send(err) }
+            else { res.send({ message: 'OK' }) }
         })
     })
 });
@@ -68,8 +68,8 @@ app.post('/addissue', (req, res) => {
     db.query("INSERT INTO issues ( Subject, Reply, Description, User_ID) values ( ?, NULL, ?, ?)", [subject, rep, desc, userid], (err, result) => {
         if (err) {
             res.send({ err: err });
-        }else{
-            res.send({message: 'OK'})
+        } else {
+            res.send({ message: 'OK' })
         }
     })
 });
@@ -154,7 +154,7 @@ app.post('/gethousedeets', (req, res) => {
 //Admin deleting user
 app.post('/deleteuser', (req, res) => {
     const userid = req.body.username;
-    db.query("delete FROM tenant WHERE User_ID=?", [userid], (err, result) => {
+    db.query("delete FROM issues WHERE User_ID=?; delete FROM payments WHERE User_ID = ?; delete FROM tenant WHERE User_ID = ?", [userid, userid, userid], (err, result) => {
         if (err) {
             res.json({ err: err });
         }
@@ -169,11 +169,12 @@ app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    if(username==="admin" && password==="gdEJjKexKP44Mf8"){
-        const result = [{User_ID: username},{}]
+    if (username === "admin" && password === "gdEJjKexKP44Mf8") {
+        const result = [{ User_ID: username }, {}]
         req.session.user = result;
         res.send([result])
-    }else{    db.query("SELECT * FROM tenant WHERE User_ID=?;", [username], (err, result) => {
+    } else {
+        db.query("SELECT * FROM tenant WHERE User_ID=?;", [username], (err, result) => {
             if (err) {
                 res.send({ err: err });
             }
@@ -192,7 +193,8 @@ app.post('/login', (req, res) => {
             else {
                 res.send({ message: "User doesn't exist." });
             }
-        })}
+        })
+    }
 });
 
 app.get('/login', (req, res) => {
