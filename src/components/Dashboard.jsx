@@ -1,10 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Issues from "./Issues";
 import Axios from "axios";
+import { styled } from "@mui/material/styles";
+import DashboardSidebar from "./layouts/dashboard/DashboardSidebar";
+
+const APP_BAR_MOBILE = 64;
+const APP_BAR_DESKTOP = 92;
+
+const RootStyle = styled("div")({
+  display: "flex",
+  minHeight: "100%",
+  overflow: "hidden",
+});
+
+const MainStyle = styled("div")(({ theme }) => ({
+  flexGrow: 1,
+  overflow: "auto",
+  minHeight: "100%",
+  paddingTop: APP_BAR_MOBILE + 24,
+  paddingBottom: theme.spacing(10),
+  [theme.breakpoints.up("lg")]: {
+    paddingTop: APP_BAR_DESKTOP + 24,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+}));
 
 function Dashboard(props) {
   const [house, setHouse] = useState({});
   const [user, setUser] = useState({});
+  const [open, setOpen] = useState("");
 
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
@@ -14,54 +39,29 @@ function Dashboard(props) {
     });
   });
 
+  function render() {
+    switch (open) {
+      case 0:
+        return <Issues />;
+      case 1:
+        return <Issues />;
+      case 2:
+        return <Issues />;
+      case 3:
+        return <Issues />;
+      case 4:
+        return <Issues />;
+    }
+  }
   return (
-    <div className="container" style={{ width: "90%" }}>
-      <div className="row">
-        <div className="col m-2">
-          <div className="row">
-            <div className="bg-dark text-light card col-12 m-2">
-              <h4>User Details</h4>
-              <ul className="list-group m-2">
-                <li className="list-group-item  m-0 border border-dark">
-                  Username : {user.User_ID}
-                </li>
-                <li className="list-group-item  m-0 border border-dark">
-                  Name : {user.Name}
-                </li>
-                <li className="list-group-item  m-0 border border-dark">
-                  House No. : {user.House_Number}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="row">
-            <div className="bg-dark text-light card col-12 m-2">
-              <h4>House Details</h4>
-              <ul className="list-group m-2">
-                <li className="list-group-item active m-0 border border-dark">
-                  Society ID : {house.Society_ID}
-                </li>
-                <li className="list-group-item active m-0 border border-dark">
-                  House No. : {house.House_Number}
-                </li>
-                <li className="list-group-item active m-0 border border-dark">
-                  Type : {house.Type_of_House}
-                </li>
-                <li className="list-group-item active m-0 border border-white">
-                  Block : {house.Block_Number}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-6 m-2">
-          <div className="row">
-            <Issues user={props.user} />
-          </div>
-        </div>
-        <div className="col m-2">3 of 3</div>
-      </div>
-    </div>
+    <RootStyle>
+      <DashboardSidebar
+        isOpenSidebar={open}
+        onCloseSidebar={(e) => console.log(e)}
+        user={user}
+      />
+      <MainStyle></MainStyle>
+    </RootStyle>
   );
 }
 
