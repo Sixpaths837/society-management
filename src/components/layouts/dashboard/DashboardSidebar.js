@@ -52,7 +52,7 @@ export default function DashboardSidebar(props) {
               <Avatar src="/avatar_default.jpg" alt="photoURL" />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                  <b>{props.user.User_ID}</b>
+                  <b>{"Admin"}</b>
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {account.role}

@@ -1,0 +1,22 @@
+[
+
+  {
+    "id":1,
+    "name":"Water Problem",
+    "city":"Plumber Called"
+  },
+
+  {
+    "id":2,
+    "name":"Waste management",
+    "city":"Cleared on Monday"
+  },
+
+  {
+    "id":3,
+    "name":"Clubhouse Chair Broken",
+    "city":"New Chair Ordered"
+  }
+
+
+]

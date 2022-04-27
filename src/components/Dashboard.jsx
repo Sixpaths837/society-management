@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Issues from "./Issues";
 import Axios from "axios";
-<<<<<<< HEAD
-import "./dashboard.css";
+import AddPayment from "./AddPayment";
 
 
-=======
+
+
 import { styled } from "@mui/material/styles";
 import DashboardSidebar from "./layouts/dashboard/DashboardSidebar";
+
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
@@ -25,12 +26,12 @@ const MainStyle = styled("div")(({ theme }) => ({
   paddingTop: APP_BAR_MOBILE + 24,
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up("lg")]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP + 22,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
 }));
->>>>>>> 1a57b024ced35cb604d4f638e380d1a40022ac73
+
 
 function Dashboard(props) {
   const [house, setHouse] = useState({});
@@ -45,32 +46,7 @@ function Dashboard(props) {
     });
   });
 
-<<<<<<< HEAD
-  function changeTab(e){
-    e.preventDefault();
 
-  }
-  return (
-      <div className="container" style={{backgroundColor:"#e3d053", width : "100%",height:"100%",margin:"0"}} >
-      <div className="row" style={{margin: "0", height: "100%",width : "100%"}}>
-
-        <div className="col-3" style={{backgroundColor: "#e3d053",borderRight: "2px solid #212529" }}>
-
-          <a className="row buttons btn btn-primary" style={{marginTop: "10px"}} onClick={changeTab}>Payments</a>
-          <a className="row buttons" onClick={changeTab}>Add Issue</a>
-          <a className="row buttons">Video games</a>
-          <a className="row buttons">thank you srom</a>
-
-        </div>
-        <div className="col-9" style={{backgroundColor: "#e3d053" ,color: "white" ,height: "100%"}}>
-          Random Dashboard shit
-        </div>
-      </div>
-
-      </div>
-
-      );
-=======
   function render() {
     switch (open) {
       case 0:
@@ -92,10 +68,15 @@ function Dashboard(props) {
         onCloseSidebar={(e) => console.log(e)}
         user={user}
       />
-      <MainStyle></MainStyle>
+      <MainStyle>
+
+        <AddPayment/>
+
+
+      </MainStyle>
     </RootStyle>
   );
->>>>>>> 1a57b024ced35cb604d4f638e380d1a40022ac73
+
 }
 
 export default Dashboard;
