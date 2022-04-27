@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Issues from "./Issues";
+import Issues from "./issues";
 import Axios from "axios";
 
 function Dashboard(props) {
