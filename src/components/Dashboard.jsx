@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Issues from "./issues";
+import Issues from "./Issues";
 import Axios from "axios";
+import "./dashboard.css";
+
+
 
 function Dashboard(props) {
   const [house, setHouse] = useState({});
@@ -14,55 +17,30 @@ function Dashboard(props) {
     });
   });
 
+  function changeTab(e){
+    e.preventDefault();
+
+  }
   return (
-    <div className="container" style={{ width: "90%" }}>
-      <div className="row">
-        <div className="col m-2">
-          <div className="row">
-            <div className="bg-dark text-light card col-12 m-2">
-              <h4 style={{ color: "aqua" }}>User Details</h4>
-              <ul className="list-group m-2">
-                <li className="list-group-item active m-0 border border-white">
-                  Username : {user.User_ID}
-                </li>
-                <li className="list-group-item active m-0 border border-white">
-                  Name : {user.Name}
-                </li>
-                <li className="list-group-item active m-0 border border-white">
-                  House No. : {user.House_Number}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="row">
-            <div className="bg-dark txt-light card col-12 m-2">
-              <h4 style={{ color: "aqua" }}>House Details</h4>
-              <ul className="list-group m-2">
-                <li className="list-group-item active m-0 border border-white">
-                  Society ID : {house.Society_ID}
-                </li>
-                <li className="list-group-item active m-0 border border-white">
-                  House No. : {house.House_Number}
-                </li>
-                <li className="list-group-item active m-0 border border-white">
-                  Type : {house.Type_of_House}
-                </li>
-                <li className="list-group-item active m-0 border border-white">
-                  Block : {house.Block_Number}
-                </li>
-              </ul>
-            </div>
-          </div>
+      <div className="container" style={{backgroundColor:"#e3d053", width : "100%",height:"100%",margin:"0"}} >
+      <div className="row" style={{margin: "0", height: "100%",width : "100%"}}>
+
+        <div className="col-3" style={{backgroundColor: "#e3d053",borderRight: "2px solid #212529" }}>
+
+          <a className="row buttons btn btn-primary" style={{marginTop: "10px"}} onClick={changeTab}>Payments</a>
+          <a className="row buttons" onClick={changeTab}>Add Issue</a>
+          <a className="row buttons">Video games</a>
+          <a className="row buttons">thank you srom</a>
+
         </div>
-        <div className="col-6 m-2">
-          <div className="row">
-            <Issues user={props.user} />
-          </div>
+        <div className="col-9" style={{backgroundColor: "#e3d053" ,color: "white" ,height: "100%"}}>
+          Random Dashboard shit
         </div>
-        <div className="col m-2">3 of 3</div>
       </div>
-    </div>
-  );
+
+      </div>
+
+      );
 }
 
 export default Dashboard;
