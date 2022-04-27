@@ -81,13 +81,13 @@ app.post('/showpayment', (req, res) => {
     const userid = req.session.user[0].User_ID;
     db.query("SELECT Amount, Duration, User_ID FROM payments WHERE User_ID=?", [userid], (err, result) => {
         if (err) {
-            res.send({ err: err });
+            res.json({ err: err });
         }
         if (result.length > 0) {
-            res.send(result);
+            res.json(result);
         }
         else {
-            res.send({ message: "No outstanding payments." });
+            res.json({ message: "No outstanding payments." });
         }
     })
 });
@@ -97,12 +97,12 @@ app.post('/addreply', (req, res) => {
     const userid = req.session.user[0].User_ID;
     const reply = req.reply;
 
-    db.query("update issues set Reply = ? where User_ID = ?", [reply, userid], (err, result) => {
+    db.query("update issues set Reply = ? where User_ID = ?;", [reply, userid], (err, result) => {
         if (err) {
-            res.send({ err: err });
+            res.json({ err: err });
         }
         else {
-            res.send({ message: "Complaint Resolved." });
+            res.json({ message: "Complaint Resolved." });
         }
     })
 });
@@ -112,29 +112,41 @@ app.post('/viewreply', (req, res) => {
     const userid = req.session.user[0].User_ID;
     db.query("select Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL", [userid], (err, result) => {
         if (err) {
-            res.send({ err: err });
+            res.json({ err: err });
         }
         if (result.length > 0) {
-            res.send(result);
+            res.json(result);
         }
         else {
-            res.send({ message: "Complaint not resolved yet." });
+            res.json({ message: "Complaint not resolved yet." });
         }
     })
 });
 
 //Admin adding payments
 app.post('/addpayments', (req, res) => {
-    const userid = req.session.user[0].User_ID;
-    db.query("insert into payments values  User_ID = ?", [userid], (err, result) => {
+    const amount = req.amount;
+    const ttype = req.ttype;
+    const tmode = req.tmode;
+    const tno = req.tno;
+    const dur = req.dur;
+    const userid = req.session.user[0].userid;
+    db.query("insert into payments (Amount, Transaction_Type, Transaction_Mode, Bank_Transaction_Number, Duration, User_ID) values (?,?,?,?,?,?);", [amount, ttype, tmode, tno, dur, userid], (err, result) => {
         if (err) {
-            res.send({ err: err });
+            res.json({ err: err });
         }
-        if (result.length > 0) {
-            res.send(result);
+    })
+});
+
+//make a .get that gets house details and society name by userid
+app.post('/gethousedeets', (req, res) => {
+    const userid = app.session.user[0].userid;
+    db.query("select s.Name_Of_Society, h.House_Number, h.Block_Number, t.User_ID from society s, house h, tenant t where h.Society_ID = s.Society_ID AND h.House_Number = t.House_Number AND t.User_ID = ?;", [userid], (err, result) => {
+        if (err) {
+            res.json({ err: err });
         }
         else {
-            res.send({ message: "Complaint not resolved yet." });
+            res.json(result);
         }
     })
 });
@@ -144,10 +156,10 @@ app.post('/deleteuser', (req, res) => {
     const userid = req.body.username;
     db.query("delete FROM tenant WHERE User_ID=?", [userid], (err, result) => {
         if (err) {
-            res.send({ err: err });
+            res.json({ err: err });
         }
         else {
-            res.send({ message: "Successfully deleted user." });
+            res.json({ message: "Successfully deleted user." });
         }
     })
 });
@@ -185,17 +197,17 @@ app.post('/login', (req, res) => {
 
 app.get('/login', (req, res) => {
     if (req.session.user) {
-        res.send({
+        res.json({
             loggedIn: true, user: req.session.user
         })
     } else {
-        res.send({
+        res.json({
             loggedIn: false
         })
     }
 })
 
-app.get('/logout', (req,res)=>{
+app.get('/logout', (req, res) => {
     res.clearCookie('userId');
     res.redirect('/');
 })
