@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Issues from "./issues";
+import Issues from "./Issues";
 import Axios from "axios";
 
 function Dashboard(props) {
@@ -20,31 +20,31 @@ function Dashboard(props) {
         <div className="col m-2">
           <div className="row">
             <div className="bg-dark text-light card col-12 m-2">
-              <h4 style={{ color: "aqua" }}>User Details</h4>
+              <h4>User Details</h4>
               <ul className="list-group m-2">
-                <li className="list-group-item active m-0 border border-white">
+                <li className="list-group-item  m-0 border border-dark">
                   Username : {user.User_ID}
                 </li>
-                <li className="list-group-item active m-0 border border-white">
+                <li className="list-group-item  m-0 border border-dark">
                   Name : {user.Name}
                 </li>
-                <li className="list-group-item active m-0 border border-white">
+                <li className="list-group-item  m-0 border border-dark">
                   House No. : {user.House_Number}
                 </li>
               </ul>
             </div>
           </div>
           <div className="row">
-            <div className="bg-dark txt-light card col-12 m-2">
-              <h4 style={{ color: "aqua" }}>House Details</h4>
+            <div className="bg-dark text-light card col-12 m-2">
+              <h4>House Details</h4>
               <ul className="list-group m-2">
-                <li className="list-group-item active m-0 border border-white">
+                <li className="list-group-item active m-0 border border-dark">
                   Society ID : {house.Society_ID}
                 </li>
-                <li className="list-group-item active m-0 border border-white">
+                <li className="list-group-item active m-0 border border-dark">
                   House No. : {house.House_Number}
                 </li>
-                <li className="list-group-item active m-0 border border-white">
+                <li className="list-group-item active m-0 border border-dark">
                   Type : {house.Type_of_House}
                 </li>
                 <li className="list-group-item active m-0 border border-white">
