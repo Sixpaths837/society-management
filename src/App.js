@@ -8,6 +8,7 @@ import { Navigate } from 'react-router';
 import Login from './components/Login.jsx'
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
+import Admin from './components/Admin';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Axios  from 'axios';
@@ -31,8 +32,9 @@ function App() {
       <Header logIn={loginStatus}/>
       <Routes>
         <Route exact path="/society-management/register/" element={<Register/>}/>
-        <Route exact path="/society-management/" element={loginStatus===""?<Login logIn={loginStatus}/>:<Navigate to='/society-management/dashboard'/>}/>
-        <Route exact path="/society-management/dashboard" element={loginStatus!==""?<Dashboard user={loginStatus}/>:<Navigate to='/society-management/'/>}/>
+        <Route exact path="/society-management/" element={loginStatus===""?<Login logIn={loginStatus}/>:(loginStatus!=="admin"?<Navigate to='/society-management/dashboard'/>:<Navigate to='/society-management/admin'/>)}/>
+        <Route exact path="/society-management/dashboard" element={loginStatus!==""&&loginStatus!=="admin"?<Dashboard user={loginStatus}/>:<Navigate to='/society-management/'/>}/>
+        <Route exact path="/society-management/admin" element={loginStatus!==""&&loginStatus==="admin"?<Admin user={loginStatus}/>:<Navigate to='/society-management/'/>}/>
         <Route path="*" element={<Navigate to='/society-management/'/>}/>      
       </Routes>
       <Footer/>

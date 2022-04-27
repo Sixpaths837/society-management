@@ -53,22 +53,23 @@ app.post('/register', (req, res) => {
     const hno = req.body.hno
     bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query("INSERT INTO tenant (User_ID, Password, Name, House_Number) values (?, ?, ?, ?)", [username, hash, nam, hno], (err, result) => {
-            res.send(err)
+            if(err){res.send(err)}
+            else{res.send({message: 'OK'})}
         })
     })
 });
 
 //Adding Issues
 app.post('/addissue', (req, res) => {
-    //const issueid = req.body.issueid;
     const desc = req.body.desc;
-    const rep = req.body.rep;
     const subject = req.body.subject;
-    const userid = app.session.user[0].userid;
+    const userid = req.session.user[0].User_ID;
 
-    db.query("INSERT INTO issues (Issue_ID, Subject, Reply, Description, User_ID) values ( , ?, , NULL, ?, ?)", [, desc, rep, subject, userid], (err, result) => {
+    db.query("INSERT INTO issues ( Subject, Reply, Description, User_ID) values ( ?, NULL, ?, ?)", [subject, rep, desc, userid], (err, result) => {
         if (err) {
             res.send({ err: err });
+        }else{
+            res.send({message: 'OK'})
         }
     })
 });
@@ -77,7 +78,7 @@ app.post('/addissue', (req, res) => {
 
 //Displaying Payments for a user
 app.post('/showpayment', (req, res) => {
-    const userid = app.session.user[0].userid;
+    const userid = req.session.user[0].User_ID;
     db.query("SELECT Amount, Duration, User_ID FROM payments WHERE User_ID=?", [userid], (err, result) => {
         if (err) {
             res.send({ err: err });
@@ -93,7 +94,7 @@ app.post('/showpayment', (req, res) => {
 
 //Admin resolving complaint
 app.post('/addreply', (req, res) => {
-    const userid = app.session.user[0].userid;
+    const userid = req.session.user[0].User_ID;
     const reply = req.reply;
 
     db.query("update issues set Reply = ? where User_ID = ?", [reply, userid], (err, result) => {
@@ -108,7 +109,7 @@ app.post('/addreply', (req, res) => {
 
 //User seeing if complaint is resolved
 app.post('/viewreply', (req, res) => {
-    const userid = app.session.user[0].userid;
+    const userid = req.session.user[0].User_ID;
     db.query("select Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL", [userid], (err, result) => {
         if (err) {
             res.send({ err: err });
@@ -124,7 +125,7 @@ app.post('/viewreply', (req, res) => {
 
 //Admin adding payments
 app.post('/addpayments', (req, res) => {
-    const userid = app.session.user[0].userid;
+    const userid = req.session.user[0].User_ID;
     db.query("insert into payments values  User_ID = ?", [userid], (err, result) => {
         if (err) {
             res.send({ err: err });
@@ -140,7 +141,7 @@ app.post('/addpayments', (req, res) => {
 
 //Admin deleting user
 app.post('/deleteuser', (req, res) => {
-    const userid = app.session.user[0].userid;
+    const userid = req.body.username;
     db.query("delete FROM tenant WHERE User_ID=?", [userid], (err, result) => {
         if (err) {
             res.send({ err: err });
@@ -156,26 +157,30 @@ app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    db.query("SELECT * FROM tenant WHERE User_ID=?;", [username], (err, result) => {
-        if (err) {
-            res.send({ err: err });
-        }
-        if (result.length > 0) {
-            bcrypt.compare(password, result[0].Password, (err, response) => {
-                if (response) {
-                    req.session.user = result;
-                    res.send(result);
-                }
-                else {
-                    res.send({ message: "Wrong username/password." });
-                }
+    if(username==="admin" && password==="gdEJjKexKP44Mf8"){
+        const result = [{User_ID: username},{}]
+        req.session.user = result;
+        res.send([result])
+    }else{    db.query("SELECT * FROM tenant WHERE User_ID=?;", [username], (err, result) => {
+            if (err) {
+                res.send({ err: err });
             }
-            );
-        }
-        else {
-            res.send({ message: "User doesn't exist." });
-        }
-    })
+            if (result.length > 0) {
+                bcrypt.compare(password, result[0].Password, (err, response) => {
+                    if (response) {
+                        req.session.user = result;
+                        res.send(result);
+                    }
+                    else {
+                        res.send({ message: "Wrong username/password." });
+                    }
+                }
+                );
+            }
+            else {
+                res.send({ message: "User doesn't exist." });
+            }
+        })}
 });
 
 app.get('/login', (req, res) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Issues from "./Issues";
 import Axios from "axios";
 
@@ -6,15 +6,17 @@ function Dashboard(props) {
   const [house, setHouse] = useState({});
   const [user, setUser] = useState({});
 
-  Axios.get("http://localhost:3001/login").then((response) => {
-    if (response.data.loggedIn === true) {
-      setUser(response.data.user[0]);
-    }
+  useEffect(() => {
+    Axios.get("http://localhost:3001/login").then((response) => {
+      if (response.data.loggedIn === true) {
+        setUser(response.data.user[0]);
+      }
+    });
   });
 
   return (
-    <div className="container">
-      <div className="row" style={{ width: "90%" }}>
+    <div className="container" style={{ width: "90%" }}>
+      <div className="row">
         <div className="col m-2">
           <div className="row">
             <div className="bg-dark text-light card col-12 m-2">
