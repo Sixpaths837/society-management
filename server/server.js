@@ -77,7 +77,7 @@ app.post('/addissue', (req, res) => {
 
 
 //Displaying Payments for a user
-app.post('/showpayment', (req, res) => {
+app.get('/showpayment', (req, res) => {
     const userid = req.session.user[0].User_ID;
     db.query("SELECT Amount, Duration, User_ID FROM payments WHERE User_ID=?", [userid], (err, result) => {
         if (err) {
