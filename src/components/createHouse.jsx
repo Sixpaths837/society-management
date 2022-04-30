@@ -1,13 +1,31 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Axios from "axios";
 
-function createHouse(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function CreateHouse(props) {
+  const [hno, setHno] = useState("");
+  const [htype, setHtype] = useState("");
+  const [bno, setBno] = useState("");
+  const [sid, setSid] = useState("");
 
-
-
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (hno && htype && bno && sid) {
+      Axios.post("http://localhost:3001/addhouse", {
+        House_Number: hno,
+        Type_Of_House: htype,
+        Block_Number: bno,
+        Society_ID: sid,
+      }).then((res) => {
+        if (res.data.message === "OK!") {
+          alert("House Added!");
+        } else {
+          alert("An Error Occured!");
+        }
+      });
+    } else {
+      alert("Please Fill the Form");
+    }
+  }
   return (
     <div>
       <br />
@@ -15,99 +33,83 @@ function createHouse(props) {
       <div className="container">
         <div className="row">
           <div className="card bg-dark col-md-6 offset-md-3 offset-md-3">
-
-              <br></br>
-            <h3 className="text-center text-success"> Add House</h3>
-
+            <br></br>
+            <h3 className="text-center text-success">Add House</h3>
 
             <div className="card-body">
               <form>
                 <div className="form-group">
                   <label>House Number</label>
                   <input
+                    type="text"
                     placeholder="Enter House Number"
-                    name="transactionMode"
+                    name="hno"
                     className="form-control"
-                    value={username}
+                    value={hno}
                     onChange={(e) => {
-                      setUsername(e.target.value);
+                      setHno(e.target.value);
                     }}
                     autoComplete="off"
                   />
-                </div>
-                <div className="form-group">
                   <label>Type of House</label>
                   <input
-                    type="transactionNumber"
+                    type="text"
                     placeholder="Enter Type of House"
+                    name="htype"
+                    className="form-control"
+                    value={htype}
+                    onChange={(e) => {
+                      setHtype(e.target.value);
+                    }}
+                    autoComplete="off"
+                  />
+
+                  <label>Block Number</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Block Number"
                     name="transactionNumber"
                     className="form-control"
-                    value={password}
+                    value={bno}
                     onChange={(e) => {
-                      setPassword(e.target.value);
+                      setBno(e.target.value);
                     }}
+                    autoComplete="off"
                   />
+                  <label>Society ID</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Society ID"
+                    name="transactionNumber"
+                    className="form-control"
+                    value={sid}
+                    onChange={(e) => {
+                      setSid(e.target.value);
+                    }}
+                    autoComplete="off"
+                  />
+
+                  <br />
+                  <button
+                    className="btn btn-success"
+                    style={{
+                      marginLeft: "2%",
+                      borderRadius: "7px",
+                      width: "46%",
+                    }}
+                    onClick={handleSubmit}
+                  >
+                    <h6>Confirm</h6>
+                  </button>
                 </div>
-
-                  <div className="form-group">
-                      <label>Block Number</label>
-                      <input
-                          type="transactionNumber"
-                          placeholder="Enter Block Number"
-                          name="transactionNumber"
-                          className="form-control"
-                          value={password}
-                          onChange={(e) => {
-                              setPassword(e.target.value);
-                          }}
-                      />
-                  </div>
-                  <div className="form-group">
-                      <label>Society ID</label>
-                      <input
-                          type="transactionNumber"
-                          placeholder="Enter Society ID"
-                          name="transactionNumber"
-                          className="form-control"
-                          value={password}
-                          onChange={(e) => {
-                              setPassword(e.target.value);
-                          }}
-                      />
-                  </div>
-
-
-                <br />
-                <a
-                  href="http://localhost:3000/society-management/dashboard"
-                  className="btn btn-success"
-
-                  style={{
-                    marginLeft: "2%",
-                    borderRadius: "7px",
-                    width: "46%",
-                  }}
-                >
-                  <h6>Confirm</h6>
-                </a>
-
               </form>
               <br />
-
-
             </div>
           </div>
         </div>
-        <br />
-        <br />
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
     </div>
   );
 }
 
-export default createHouse();
+export default CreateHouse;

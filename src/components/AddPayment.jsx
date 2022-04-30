@@ -1,98 +1,116 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Axios from "axios";
 
 function AddPayment(props) {
+  const [user, setUser] = useState("");
+  const [amount, setAmount] = useState("");
+  const [duration, setDuration] = useState("");
+  const [ttype, setTtype] = useState("");
 
-
-
-
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (user && amount && duration && ttype) {
+      Axios.post("http://localhost:3001/addpayments", {
+        amount: amount,
+        ttype: ttype,
+        dur: duration,
+        userid: user,
+      }).then((res) => {
+        if (res.data.message === "OK") {
+          alert("Payment Added!");
+        } else {
+          alert("An Error Occured!");
+        }
+      });
+    }
+  }
   return (
     <div>
       <br />
       <br />
       <div className="container">
         <div className="row">
-          <div className="card  col-md-6 offset-md-3 offset-md-3">
-
-              <br></br>
+          <div
+            className="card bg-dark col-6 offset-md-3 offset-md-3"
+            style={{ minHeight: "100px", overflow: "hidden" }}
+          >
+            <br />
             <h3 className="text-center text-success"> Add Payment</h3>
-
-              <div className="form-group">
-                  <label>User ID</label>
-                  <input
-                      type="transactionNumber"
-                      placeholder="Enter Block Number"
-                      name="transactionNumber"
-                      className="form-control"
-
-                  />
-              </div>
 
             <div className="card-body">
               <form>
                 <div className="form-group">
-                  <label>Amount</label>
+                  <label>User ID</label>
                   <input
-                      type="transactionNumber"
-                    placeholder="Enter House Number"
-                    name="transactionMode"
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Duration</label>
-                  <input
-                    type="transactionNumber"
-                    placeholder="Enter Type of House"
+                    type="text"
+                    placeholder="Enter User ID"
                     name="transactionNumber"
                     className="form-control"
-
+                    value={user}
+                    onChange={(e) => {
+                      setUser(e.target.value);
+                    }}
+                    autoComplete="off"
+                  />
+                  <label>Amount</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Amount"
+                    name="amount"
+                    className="form-control"
+                    value={amount}
+                    onChange={(e) => {
+                      setAmount(e.target.value);
+                    }}
+                    autoComplete="off"
+                  />
+                  <label>Duration</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Duration"
+                    name="duration"
+                    className="form-control"
+                    value={duration}
+                    onChange={(e) => {
+                      setDuration(e.target.value);
+                    }}
+                    autoComplete="off"
                   />
                 </div>
 
-
-                  <div className="form-group">
-                      <label>Transaction Type</label>
-                      <input
-                          type="transactionNumber"
-                          placeholder="Enter Society ID"
-                          name="transactionNumber"
-                          className="form-control"
-
-                      />
-                  </div>
-
+                <div className="form-group">
+                  <label>Transaction Type</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Transaction Type"
+                    name="transanctiontype"
+                    className="form-control"
+                    value={ttype}
+                    onChange={(e) => {
+                      setTtype(e.target.value);
+                    }}
+                    autoComplete="off"
+                  />
+                </div>
 
                 <br />
-                <a
-                  href="http://localhost:3000/society-management/dashboard"
+                <button
                   className="btn btn-success"
-
                   style={{
                     marginLeft: "2%",
                     borderRadius: "7px",
                     width: "46%",
                   }}
+                  onClick={handleSubmit}
                 >
                   <h6>Confirm</h6>
-                </a>
-
+                </button>
               </form>
               <br />
-
-
             </div>
           </div>
         </div>
-        <br />
-        <br />
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
     </div>
   );
 }

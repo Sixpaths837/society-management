@@ -1,11 +1,12 @@
 .App {
   text-align: center;
-  background:whitesmoke;
+  background:#dcdcdc;
   position:absolute;
   top:0px;
   right:0px;
   bottom:0px;
   left:0px;
+  overflow: auto;
 }
 
 .App-logo {

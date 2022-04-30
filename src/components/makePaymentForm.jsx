@@ -1,80 +1,110 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Axios from "axios";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 
-function MakePaymentForm(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function MakePaymentButton(props) {
+  const [tmode, setTmode] = useState("");
+  const [tnumber, setTnumber] = useState("");
+  const [open, setOpen] = useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(props.value);
+    if (tmode && tnumber) {
+      Axios.post("http://localhost:3001/makepayment", {
+        tno: tnumber,
+        tmode: tmode,
+        Payment_ID: JSON.stringify(props.value),
+      }).then((res) => {
+        if (res.data.message) {
+          alert(res.data.message);
+          setOpen(false);
+        } else {
+          alert("An Error has Occurred!");
+        }
+      });
+    } else {
+      alert("Please fill the Details!");
+    }
+  }
 
   return (
     <div>
-      <br />
-      <br />
-      <div className="container">
-        <div className="row">
-          <div className="card col-md-6 offset-md-3 offset-md-3">
-            <h3 className="text-center text-success"> Submit Payment Details</h3>
-            <div className="card-body">
-              <form>
-                <div className="form-group">
-                  <label>Transaction Mode</label>
-                  <input
-                    placeholder="Enter Transaction Mode"
-                    name="transactionMode"
-                    className="form-control"
-                    value={username}
-                    onChange={(e) => {
-                      setUsername(e.target.value);
-                    }}
-                    autoComplete="off"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Transaction Number</label>
-                  <input
-                    type="transactionNumber"
-                    placeholder="Enter Transaction Number"
-                    name="transactionNumber"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                  />
-                </div>
+      <Button variant="contained" onClick={handleClickOpen}>
+        Make Payment
+      </Button>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <div>
+          <br />
+          <br />
+          <div className="container">
+            <div className="row">
+              <div className="card col-md-10 offset-md-1 offset-md-1">
                 <br />
-                <a
-                  href="http://localhost:3000/society-management/dashboard"
-                  className="btn btn-success"
+                <h3 className="text-center text-success">
+                  Submit Payment Details
+                </h3>
+                <div className="card-body">
+                  <form>
+                    <div className="form-group">
+                      <label>Transaction Mode</label>
+                      <input
+                        placeholder="Enter Transaction Mode"
+                        name="transactionMode"
+                        className="form-control"
+                        value={tmode}
+                        onChange={(e) => {
+                          setTmode(e.target.value);
+                        }}
+                        autoComplete="off"
+                      />
 
-                  style={{
-                    marginLeft: "2%",
-                    borderRadius: "7px",
-                    width: "46%",
-                  }}
-                >
-                  <h6>Confirm</h6>
-                </a>
-
-              </form>
-              <br />
-
-
+                      <label>Transaction Number</label>
+                      <input
+                        type="transactionNumber"
+                        placeholder="Enter Transaction Number"
+                        name="transactionNumber"
+                        className="form-control"
+                        value={tnumber}
+                        onChange={(e) => {
+                          setTnumber(e.target.value);
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+                    <br />
+                    <button
+                      className="btn btn-success"
+                      style={{
+                        marginLeft: "26%",
+                        borderRadius: "7px",
+                        width: "46%",
+                      }}
+                      onClick={handleSubmit}
+                    >
+                      <h6>Confirm</h6>
+                    </button>
+                  </form>
+                  <br />
+                </div>
+              </div>
             </div>
+            <br />
+            <br />
           </div>
         </div>
-        <br />
-        <br />
-      </div>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      </Dialog>
     </div>
   );
 }
 
-export default MakePaymentForm;
+export default MakePaymentButton;

@@ -90,10 +90,10 @@ app.post("/addissue", (req, res) => {
 });
 
 //Displaying Payments for a user
-app.post("/showpayment", (req, res) => {
+app.get("/showpayment", (req, res) => {
   const userid = req.session.user[0].User_ID;
   db.query(
-    "SELECT Payment_ID, Amount, Duration, User_ID FROM payments WHERE User_ID=? AND Bank_Transaction_Number IS NULL",
+    "SELECT Payment_ID, Transaction_Type, Amount, Duration FROM payments WHERE User_ID=? AND Bank_Transaction_Number IS NULL",
     [userid],
     (err, result) => {
       if (err) {
@@ -109,11 +109,9 @@ app.post("/showpayment", (req, res) => {
 });
 
 //Admin viewing all outstanding payments
-app.post("/showallpayments", (req, res) => {
-  const userid = req.session.user[0].User_ID;
+app.get("/showoutstandingpayments", (req, res) => {
   db.query(
-    "SELECT Payment_ID, Amount, Duration, User_ID FROM payments WHERE Bank_Transaction_Number IS NULL",
-    [userid],
+    "SELECT Payment_ID, Amount, Duration, Transaction_Type, User_ID FROM payments WHERE Bank_Transaction_Number IS NULL",
     (err, result) => {
       if (err) {
         res.json({ err: err });
@@ -122,6 +120,40 @@ app.post("/showallpayments", (req, res) => {
         res.json(result);
       } else {
         res.send({ message: "No outstanding payments." });
+      }
+    }
+  );
+});
+
+//Done Payments
+app.get("/showdonepayments", (req, res) => {
+  db.query(
+    "SELECT * FROM payments WHERE Bank_Transaction_Number IS NOT NULL",
+    (err, result) => {
+      if (err) {
+        res.json({ err: err });
+      }
+      if (result.length > 0) {
+        res.json(result);
+      } else {
+        res.send({ message: "No payments yet." });
+      }
+    }
+  );
+});
+
+//View outstanding issues
+app.get("/showpendingissues", (req, res) => {
+  db.query(
+    "select Issue_ID, User_ID, Subject, Description, Reply from issues where Reply IS NULL",
+    (err, result) => {
+      if (err) {
+        res.json({ err: err });
+      }
+      if (result.length > 0) {
+        res.json(result);
+      } else {
+        res.send({ message: "No outstanding issues." });
       }
     }
   );
@@ -146,12 +178,11 @@ app.post("/addreply", (req, res) => {
 });
 
 //User seeing if complaint is resolved
-app.post("/viewreply", (req, res) => {
+app.get("/viewreply", (req, res) => {
   const userid = req.session.user[0].User_ID;
-  const issueid = req.body.Issue_ID;
   db.query(
-    "select Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL AND Issue_ID = ?",
-    [userid, issueid],
+    "select Issue_ID, Subject, Reply from issues where User_ID = ? AND Reply IS NOT NULL",
+    [userid],
     (err, result) => {
       if (err) {
         res.json({ err: err });
@@ -169,10 +200,11 @@ app.post("/viewreply", (req, res) => {
 app.post("/makepayment", (req, res) => {
   const tno = req.body.tno;
   const userid = req.session.user[0].User_ID;
+  const tmod = req.body.tmode;
   const pid = req.body.Payment_ID;
   db.query(
-    "update payments set Bank_Transaction_Number = ? where User_ID = ? and Payment_ID = ?;",
-    [tno, userid, pid],
+    "update payments set Bank_Transaction_Number = ?, Transaction_Mode = ? where User_ID = ? and Payment_ID = ?;",
+    [tno, tmod, userid, pid],
     (err, result) => {
       if (err) {
         res.json({ err: err });
@@ -187,27 +219,42 @@ app.post("/makepayment", (req, res) => {
 app.post("/addpayments", (req, res) => {
   const amount = req.body.amount;
   const ttype = req.body.ttype;
-  const tmode = req.body.tmode;
   const dur = req.body.dur;
-  const userid = req.session.user[0].User_ID;
+  const userid = req.body.userid;
   db.query(
-    "insert into payments (Amount, Transaction_Type, Transaction_Mode, Duration, User_ID) values (?,?,?,?,?);",
-    [amount, ttype, tmode, dur, userid],
+    "insert into payments (Amount, Transaction_Type, Duration, User_ID) values (?,?,?,?);",
+    [amount, ttype, dur, userid],
     (err, result) => {
       if (err) {
         res.json({ err: err });
       } else {
-        res.send({ message: "OK", Payment_ID: result.insertId });
+        res.send({ message: "OK" });
       }
     }
   );
 });
 
 //make a .get that gets house details and society name by userid
+app.get("/gethousedeets", (req, res) => {
+  const userid = req.session.user[0].User_ID;
+  db.query(
+    "select s.Name_Of_Society as Name_of_Society, h.House_Number, h.Type_of_House, h.Block_Number from society s, house h, tenant t where h.Society_ID = s.Society_ID AND h.House_Number = t.House_Number AND t.User_ID = ?;",
+    [userid],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//Admin search user
 app.post("/gethousedeets", (req, res) => {
   const userid = req.body.User_ID;
   db.query(
-    "select s.Name_Of_Society, h.House_Number, h.Block_Number from society s, house h, tenant t where h.Society_ID = s.Society_ID AND h.House_Number = t.House_Number AND t.User_ID = ?;",
+    "select s.Name_Of_Society as Name_of_Society, h.House_Number, h.Block_Number,t.User_ID from society s, house h, tenant t where h.Society_ID = s.Society_ID AND h.House_Number = t.House_Number AND t.User_ID = ?;",
     [userid],
     (err, result) => {
       if (err) {
@@ -269,7 +316,7 @@ app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (username === "admin" && password === "gdEJjKexKP44Mf8") {
+  if (username === "Admin" && password === "gdEJjKexKP44Mf8") {
     const result = [{ User_ID: username }, {}];
     req.session.user = result;
     res.send([result]);

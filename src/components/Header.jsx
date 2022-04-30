@@ -18,7 +18,7 @@ function Header(props) {
             className="text-light"
           >
             <div className="m-2" style={{ width: "100%" }} role="navigation">
-              <h3>Society-Management</h3>
+              <h3>Housing-Management</h3>
             </div>
           </Link>
           {props.logIn !== "" ? (
@@ -27,7 +27,10 @@ function Header(props) {
                 <a
                   onClick={logout}
                   href="http://localhost:3000/society-management/"
-                  style={{ textDecoration: "none" }}
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
+                  }}
                 >
                   Logout
                 </a>

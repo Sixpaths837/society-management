@@ -4,13 +4,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { Box, Link, Typography, Avatar } from "@mui/material";
 // mock
-import account from "../../../_mock/account";
 // hooks
 // components
 import Scrollbar from "../../Scrollbar";
 import NavSection from "../../NavSection";
 //
-import navConfig from "./NavConfig";
+import { navConfig1, navConfig2 } from "./NavConfig";
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +43,7 @@ export default function DashboardSidebar(props) {
             display: "flex",
             flexDirection: "column",
           },
+          backgroundColor: "#ffffff",
         }}
       >
         <Box sx={{ mb: 5, mx: 2.5 }}>
@@ -52,17 +52,21 @@ export default function DashboardSidebar(props) {
               <Avatar src="/avatar_default.jpg" alt="photoURL" />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                  <b>{"Admin"}</b>
+                  <b>{props.user.User_ID}</b>
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {account.role}
+                  {props.user.User_ID === "Admin" ? "admin" : "tenant"}
                 </Typography>
               </Box>
             </AccountStyle>
           </Link>
         </Box>
 
-        <NavSection navConfig={navConfig} />
+        <NavSection
+          navConfig={props.user.User_ID === "Admin" ? navConfig2 : navConfig1}
+          active={props.active}
+          setval={props.setval}
+        />
       </Scrollbar>
     </RootStyle>
   );

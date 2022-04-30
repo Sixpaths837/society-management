@@ -27,7 +27,12 @@ class Register extends Component {
   };
 
   registerUser = (e) => {
-    if (this.state.username !== "") {
+    if (
+      this.state.username !== "" &&
+      this.state.password !== "" &&
+      this.state.hno !== "" &&
+      this.state.name
+    ) {
       e.preventDefault();
       Axios.post("http://localhost:3001/register", {
         username: this.state.username,
@@ -38,8 +43,15 @@ class Register extends Component {
         console.log(res);
       });
       alert("User Registered");
+      setTimeout(() => {
+        window.location.href = e.target.href;
+      }, 100);
     } else {
       alert("Please fill the form");
+      setTimeout(() => {
+        window.location.href =
+          "http://localhost:3000/society-management/register";
+      }, 100);
     }
   };
   check() {
